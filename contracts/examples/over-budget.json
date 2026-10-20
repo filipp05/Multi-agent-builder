@@ -1,0 +1,533 @@
+{
+  "schema_version": "0.1.0",
+  "project_id": "demo-project",
+  "run_id": "demo-run",
+  "revision": 1,
+  "status": "constraints_unresolved",
+  "sources": [
+    {
+      "id": "demo-rules",
+      "kind": "synthetic",
+      "reference": "Учебные нормы: не применять как строительную рекомендацию",
+      "captured_at": "2026-10-20T20:00:00+03:00"
+    },
+    {
+      "id": "demo-prices",
+      "kind": "synthetic",
+      "reference": "Вымышленные цены и доставка для проверки арифметики",
+      "captured_at": "2026-10-20T20:00:00+03:00"
+    }
+  ],
+  "offers": [
+    {
+      "id": "primer",
+      "supplier_id": "store-1",
+      "category": "preparation",
+      "compatibility_key": "dry-room",
+      "pack_quantity": {
+        "value": "1",
+        "unit": "set"
+      },
+      "price_minor": 400000,
+      "currency": "RUB",
+      "available_on": "2026-10-26",
+      "source_ids": [
+        "demo-prices"
+      ]
+    },
+    {
+      "id": "paint",
+      "supplier_id": "store-1",
+      "category": "paint",
+      "compatibility_key": "prepared-wall",
+      "pack_quantity": {
+        "value": "5",
+        "unit": "l"
+      },
+      "price_minor": 300000,
+      "currency": "RUB",
+      "available_on": "2026-10-26",
+      "source_ids": [
+        "demo-prices"
+      ]
+    },
+    {
+      "id": "floor",
+      "supplier_id": "store-1",
+      "category": "laminate",
+      "compatibility_key": "prepared-floor",
+      "pack_quantity": {
+        "value": "2.2",
+        "unit": "m2"
+      },
+      "price_minor": 200000,
+      "currency": "RUB",
+      "available_on": "2026-10-26",
+      "source_ids": [
+        "demo-prices"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-brief",
+      "kind": "brief",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "room": {
+          "length_m": "4",
+          "width_m": "5",
+          "height_m": "2.7",
+          "openings_m2": "4",
+          "surface_condition": "prepared"
+        },
+        "budget_minor": 7000000,
+        "currency": "RUB",
+        "region": "Учебный регион",
+        "start_date": "2026-10-26",
+        "deadline": "2026-10-30",
+        "hard_preferences": [
+          "Без дорогого дерева"
+        ],
+        "soft_preferences": [
+          "Светло",
+          "Легко мыть"
+        ],
+        "excluded_work": [
+          "Потолок",
+          "Мебель",
+          "Электрика"
+        ],
+        "calendar": {
+          "timezone": "Europe/Moscow",
+          "work_weekdays": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "day_start_hour": 9,
+          "hours_per_day": 8,
+          "crew_count": 1
+        }
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-design_options",
+      "kind": "design_options",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-brief"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "concepts": [
+          {
+            "id": "concept-1",
+            "name": "Светлый нейтральный",
+            "description": "Окраска стен и ламинат; учебный пример",
+            "colors": [
+              "#FFFFFF",
+              "#D8C8A8"
+            ],
+            "wall_finish": "paint",
+            "floor_finish": "laminate",
+            "hard_preferences_met": [
+              "Без дорогого дерева"
+            ],
+            "source_ids": [
+              "demo-rules"
+            ]
+          },
+          {
+            "id": "concept-2",
+            "name": "Тёплый спокойный",
+            "description": "Окраска стен и ламинат; учебный пример",
+            "colors": [
+              "#EEE5D5",
+              "#A89A80"
+            ],
+            "wall_finish": "paint",
+            "floor_finish": "laminate",
+            "hard_preferences_met": [
+              "Без дорогого дерева"
+            ],
+            "source_ids": [
+              "demo-rules"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-design_selection",
+      "kind": "design_selection",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-design_options"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "concept_id": "concept-1"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-work_plan",
+      "kind": "work_plan",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-brief",
+        "a-design_selection"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "tasks": [
+          {
+            "id": "prepare",
+            "title": "Защита поверхностей и подготовка",
+            "quantity": {
+              "value": "1",
+              "unit": "set"
+            },
+            "predecessor_ids": [],
+            "labor_hours": "8",
+            "wait_after_hours": "0",
+            "source_ids": [
+              "demo-rules"
+            ]
+          },
+          {
+            "id": "paint-task",
+            "title": "Окраска стен",
+            "quantity": {
+              "value": "44.6",
+              "unit": "m2"
+            },
+            "predecessor_ids": [
+              "prepare"
+            ],
+            "labor_hours": "8",
+            "wait_after_hours": "16",
+            "source_ids": [
+              "demo-rules"
+            ]
+          },
+          {
+            "id": "floor-task",
+            "title": "Укладка пола",
+            "quantity": {
+              "value": "20",
+              "unit": "m2"
+            },
+            "predecessor_ids": [
+              "paint-task"
+            ],
+            "labor_hours": "8",
+            "wait_after_hours": "0",
+            "source_ids": [
+              "demo-rules"
+            ]
+          }
+        ],
+        "requirements": [
+          {
+            "id": "prep-req",
+            "task_ids": [
+              "prepare"
+            ],
+            "category": "preparation",
+            "base_quantity": {
+              "value": "1",
+              "unit": "set"
+            },
+            "waste_percent": "0",
+            "compatibility_key": "dry-room",
+            "source_ids": [
+              "demo-rules"
+            ]
+          },
+          {
+            "id": "paint-req",
+            "task_ids": [
+              "paint-task"
+            ],
+            "category": "paint",
+            "base_quantity": {
+              "value": "8.92",
+              "unit": "l"
+            },
+            "waste_percent": "10",
+            "compatibility_key": "prepared-wall",
+            "source_ids": [
+              "demo-rules"
+            ]
+          },
+          {
+            "id": "floor-req",
+            "task_ids": [
+              "floor-task"
+            ],
+            "category": "laminate",
+            "base_quantity": {
+              "value": "20",
+              "unit": "m2"
+            },
+            "waste_percent": "10",
+            "compatibility_key": "prepared-floor",
+            "source_ids": [
+              "demo-rules"
+            ]
+          }
+        ],
+        "unsupported_requests": []
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-procurement",
+      "kind": "procurement",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-work_plan"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "purchases": [
+          {
+            "id": "buy-primer",
+            "requirement_id": "prep-req",
+            "offer_id": "primer",
+            "pack_count": 1,
+            "purchased_quantity": {
+              "value": "1",
+              "unit": "set"
+            },
+            "unit_price_minor": 400000,
+            "amount_minor": 400000
+          },
+          {
+            "id": "buy-paint",
+            "requirement_id": "paint-req",
+            "offer_id": "paint",
+            "pack_count": 2,
+            "purchased_quantity": {
+              "value": "10",
+              "unit": "l"
+            },
+            "unit_price_minor": 300000,
+            "amount_minor": 600000
+          },
+          {
+            "id": "buy-floor",
+            "requirement_id": "floor-req",
+            "offer_id": "floor",
+            "pack_count": 10,
+            "purchased_quantity": {
+              "value": "22",
+              "unit": "m2"
+            },
+            "unit_price_minor": 200000,
+            "amount_minor": 2000000
+          }
+        ],
+        "deliveries": [
+          {
+            "id": "delivery-1",
+            "supplier_id": "store-1",
+            "amount_minor": 250000,
+            "available_on": "2026-10-26",
+            "source_ids": [
+              "demo-prices"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-estimate",
+      "kind": "estimate",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-work_plan",
+        "a-procurement"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "lines": [
+          {
+            "id": "line-buy-primer",
+            "kind": "material",
+            "reference_id": "buy-primer",
+            "amount_minor": 400000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          },
+          {
+            "id": "line-buy-paint",
+            "kind": "material",
+            "reference_id": "buy-paint",
+            "amount_minor": 600000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          },
+          {
+            "id": "line-buy-floor",
+            "kind": "material",
+            "reference_id": "buy-floor",
+            "amount_minor": 2000000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          },
+          {
+            "id": "line-prepare",
+            "kind": "labor",
+            "reference_id": "prepare",
+            "amount_minor": 1000000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          },
+          {
+            "id": "line-paint-task",
+            "kind": "labor",
+            "reference_id": "paint-task",
+            "amount_minor": 1500000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          },
+          {
+            "id": "line-floor-task",
+            "kind": "labor",
+            "reference_id": "floor-task",
+            "amount_minor": 1000000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          },
+          {
+            "id": "line-delivery",
+            "kind": "delivery",
+            "reference_id": "delivery-1",
+            "amount_minor": 250000,
+            "source_ids": [
+              "demo-prices"
+            ]
+          }
+        ],
+        "base_minor": 6750000,
+        "reserve_percent": "10",
+        "reserve_minor": 675000,
+        "total_minor": 7425000,
+        "budget_status": "violated"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-schedule",
+      "kind": "schedule",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-brief",
+        "a-work_plan",
+        "a-procurement"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "items": [
+          {
+            "task_id": "prepare",
+            "start_at": "2026-10-26T09:00:00+03:00",
+            "finish_at": "2026-10-26T17:00:00+03:00",
+            "crew_id": "crew-1"
+          },
+          {
+            "task_id": "paint-task",
+            "start_at": "2026-10-27T09:00:00+03:00",
+            "finish_at": "2026-10-27T17:00:00+03:00",
+            "crew_id": "crew-1"
+          },
+          {
+            "task_id": "floor-task",
+            "start_at": "2026-10-28T09:00:00+03:00",
+            "finish_at": "2026-10-28T17:00:00+03:00",
+            "crew_id": "crew-1"
+          }
+        ],
+        "finish_at": "2026-10-28T17:00:00+03:00",
+        "deadline_status": "satisfied"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "artifact_id": "a-audit",
+      "kind": "audit",
+      "project_id": "demo-project",
+      "run_id": "demo-run",
+      "revision": 1,
+      "input_artifact_ids": [
+        "a-brief",
+        "a-design_options",
+        "a-design_selection",
+        "a-work_plan",
+        "a-procurement",
+        "a-estimate",
+        "a-schedule"
+      ],
+      "source_ids": [
+        "demo-rules"
+      ],
+      "assumptions": [],
+      "payload": {
+        "status": "passed",
+        "findings": []
+      }
+    }
+  ]
+}

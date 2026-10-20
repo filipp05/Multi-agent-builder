@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "0.1.0"
+      ]
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "stage": {
+      "enum": [
+        "brief",
+        "design_options",
+        "design_selection",
+        "work_plan",
+        "procurement",
+        "estimate",
+        "schedule",
+        "audit"
+      ]
+    },
+    "status": {
+      "enum": [
+        "ok",
+        "needs_input",
+        "failed"
+      ]
+    },
+    "artifact_id": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "field_path",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "code": {
+              "enum": [
+                "INVALID_INPUT",
+                "STALE_REVISION",
+                "UNSUPPORTED_REQUEST",
+                "PROVIDER_UNAVAILABLE",
+                "LIMIT_REACHED",
+                "INTERNAL_ERROR"
+              ]
+            },
+            "message": {
+              "type": "string",
+              "minLength": 1
+            },
+            "retryable": {
+              "type": "boolean"
+            },
+            "field_paths": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "code",
+            "message",
+            "retryable",
+            "field_paths"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "run_id",
+    "revision",
+    "stage",
+    "status",
+    "artifact_id",
+    "questions",
+    "error"
+  ],
+  "additionalProperties": false
+}

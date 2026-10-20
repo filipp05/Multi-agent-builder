@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "project_id": "demo-project",
+  "run_id": "demo-run",
+  "revision": 1,
+  "stage": "work_plan",
+  "status": "failed",
+  "artifact_id": null,
+  "questions": [],
+  "error": {
+    "code": "PROVIDER_UNAVAILABLE",
+    "message": "Модель временно недоступна",
+    "retryable": true,
+    "field_paths": []
+  }
+}

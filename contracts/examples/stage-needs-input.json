@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "project_id": "demo-project",
+  "run_id": "demo-run",
+  "revision": 1,
+  "stage": "work_plan",
+  "status": "needs_input",
+  "artifact_id": null,
+  "questions": [
+    {
+      "field_path": "room.surface_condition",
+      "message": "Основание подготовлено?"
+    }
+  ],
+  "error": null
+}

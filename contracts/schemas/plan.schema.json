@@ -1,0 +1,1504 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:renovation:plan:0.1.0",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "0.1.0"
+      ]
+    },
+    "project_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "constraints_unresolved"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "synthetic",
+              "observed"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "captured_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "(Z|[+-][0-9]{2}:[0-9]{2})$"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "reference",
+          "captured_at"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "offers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "supplier_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "compatibility_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pack_quantity": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+              },
+              "unit": {
+                "enum": [
+                  "m2",
+                  "m",
+                  "l",
+                  "kg",
+                  "piece",
+                  "set"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ],
+            "additionalProperties": false
+          },
+          "price_minor": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "currency": {
+            "enum": [
+              "RUB"
+            ]
+          },
+          "available_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "supplier_id",
+          "category",
+          "compatibility_key",
+          "pack_quantity",
+          "price_minor",
+          "currency",
+          "available_on",
+          "source_ids"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "brief"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "room": {
+                    "type": "object",
+                    "properties": {
+                      "length_m": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                      },
+                      "width_m": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                      },
+                      "height_m": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                      },
+                      "openings_m2": {
+                        "type": "string",
+                        "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                      },
+                      "surface_condition": {
+                        "enum": [
+                          "prepared",
+                          "needs_preparation",
+                          "unknown"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "length_m",
+                      "width_m",
+                      "height_m",
+                      "openings_m2",
+                      "surface_condition"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "budget_minor": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "currency": {
+                    "enum": [
+                      "RUB"
+                    ]
+                  },
+                  "region": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "start_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "deadline": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "hard_preferences": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  },
+                  "soft_preferences": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  },
+                  "excluded_work": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  },
+                  "calendar": {
+                    "type": "object",
+                    "properties": {
+                      "timezone": {
+                        "enum": [
+                          "Europe/Moscow"
+                        ]
+                      },
+                      "work_weekdays": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 6
+                        },
+                        "uniqueItems": true,
+                        "minItems": 1
+                      },
+                      "day_start_hour": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 23
+                      },
+                      "hours_per_day": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 12
+                      },
+                      "crew_count": {
+                        "enum": [
+                          1
+                        ]
+                      }
+                    },
+                    "required": [
+                      "timezone",
+                      "work_weekdays",
+                      "day_start_hour",
+                      "hours_per_day",
+                      "crew_count"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "room",
+                  "budget_minor",
+                  "currency",
+                  "region",
+                  "start_date",
+                  "deadline",
+                  "hard_preferences",
+                  "soft_preferences",
+                  "excluded_work",
+                  "calendar"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "design_options"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "concepts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "description": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "colors": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^#[0-9A-Fa-f]{6}$"
+                          },
+                          "minItems": 1
+                        },
+                        "wall_finish": {
+                          "enum": [
+                            "paint"
+                          ]
+                        },
+                        "floor_finish": {
+                          "enum": [
+                            "laminate"
+                          ]
+                        },
+                        "hard_preferences_met": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        },
+                        "source_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "colors",
+                        "wall_finish",
+                        "floor_finish",
+                        "hard_preferences_met",
+                        "source_ids"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  }
+                },
+                "required": [
+                  "concepts"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "design_selection"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "concept_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "concept_id"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "work_plan"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "tasks": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "quantity": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                            },
+                            "unit": {
+                              "enum": [
+                                "m2",
+                                "m",
+                                "l",
+                                "kg",
+                                "piece",
+                                "set"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "value",
+                            "unit"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "predecessor_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        },
+                        "labor_hours": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                        },
+                        "wait_after_hours": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                        },
+                        "source_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "quantity",
+                        "predecessor_ids",
+                        "labor_hours",
+                        "wait_after_hours",
+                        "source_ids"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  },
+                  "requirements": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "task_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 1
+                        },
+                        "category": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "base_quantity": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                            },
+                            "unit": {
+                              "enum": [
+                                "m2",
+                                "m",
+                                "l",
+                                "kg",
+                                "piece",
+                                "set"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "value",
+                            "unit"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "waste_percent": {
+                          "type": "string",
+                          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                        },
+                        "compatibility_key": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "source_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "task_ids",
+                        "category",
+                        "base_quantity",
+                        "waste_percent",
+                        "compatibility_key",
+                        "source_ids"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  },
+                  "unsupported_requests": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "tasks",
+                  "requirements",
+                  "unsupported_requests"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "procurement"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "purchases": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "requirement_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "offer_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "pack_count": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "purchased_quantity": {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                            },
+                            "unit": {
+                              "enum": [
+                                "m2",
+                                "m",
+                                "l",
+                                "kg",
+                                "piece",
+                                "set"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "value",
+                            "unit"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "unit_price_minor": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "amount_minor": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "requirement_id",
+                        "offer_id",
+                        "pack_count",
+                        "purchased_quantity",
+                        "unit_price_minor",
+                        "amount_minor"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  },
+                  "deliveries": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "supplier_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "amount_minor": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "available_on": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "source_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "supplier_id",
+                        "amount_minor",
+                        "available_on",
+                        "source_ids"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "purchases",
+                  "deliveries"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "estimate"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "lines": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "kind": {
+                          "enum": [
+                            "material",
+                            "labor",
+                            "delivery"
+                          ]
+                        },
+                        "reference_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "amount_minor": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "source_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "kind",
+                        "reference_id",
+                        "amount_minor",
+                        "source_ids"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  },
+                  "base_minor": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "reserve_percent": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+                  },
+                  "reserve_minor": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "total_minor": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "budget_status": {
+                    "enum": [
+                      "satisfied",
+                      "violated",
+                      "unknown"
+                    ]
+                  }
+                },
+                "required": [
+                  "lines",
+                  "base_minor",
+                  "reserve_percent",
+                  "reserve_minor",
+                  "total_minor",
+                  "budget_status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "schedule"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "task_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "start_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "(Z|[+-][0-9]{2}:[0-9]{2})$"
+                        },
+                        "finish_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "(Z|[+-][0-9]{2}:[0-9]{2})$"
+                        },
+                        "crew_id": {
+                          "enum": [
+                            "crew-1"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "task_id",
+                        "start_at",
+                        "finish_at",
+                        "crew_id"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  },
+                  "finish_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "(Z|[+-][0-9]{2}:[0-9]{2})$"
+                  },
+                  "deadline_status": {
+                    "enum": [
+                      "satisfied",
+                      "violated",
+                      "unknown"
+                    ]
+                  }
+                },
+                "required": [
+                  "items",
+                  "finish_at",
+                  "deadline_status"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "schema_version": {
+                "enum": [
+                  "0.1.0"
+                ]
+              },
+              "artifact_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "audit"
+                ]
+              },
+              "project_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "run_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "input_artifact_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "source_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "assumptions": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 0
+              },
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "passed",
+                      "failed",
+                      "incomplete"
+                    ]
+                  },
+                  "findings": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "severity": {
+                          "enum": [
+                            "blocking",
+                            "warning"
+                          ]
+                        },
+                        "code": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "artifact_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 1
+                        },
+                        "item_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        },
+                        "owner": {
+                          "enum": [
+                            "filipp",
+                            "misha",
+                            "oleg",
+                            "karina"
+                          ]
+                        },
+                        "source_ids": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "minItems": 0
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "severity",
+                        "code",
+                        "message",
+                        "artifact_ids",
+                        "item_ids",
+                        "owner",
+                        "source_ids"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "minItems": 0
+                  }
+                },
+                "required": [
+                  "status",
+                  "findings"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "schema_version",
+              "artifact_id",
+              "kind",
+              "project_id",
+              "run_id",
+              "revision",
+              "input_artifact_ids",
+              "source_ids",
+              "assumptions",
+              "payload"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "minItems": 8,
+      "maxItems": 8
+    }
+  },
+  "required": [
+    "schema_version",
+    "project_id",
+    "run_id",
+    "revision",
+    "status",
+    "sources",
+    "offers",
+    "artifacts"
+  ],
+  "additionalProperties": false
+}
