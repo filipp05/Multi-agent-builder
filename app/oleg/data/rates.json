@@ -1,0 +1,18 @@
+{
+  "rates_version": "oleg-rates-2026-10-21",
+  "note": "Учебные тарифы доставки и работ, правило резерва. Вымышлены (synthetic). В договоре 0.1.0 нет места для тарифов в контексте этапа, поэтому их источник добавляется к снимку источников явно.",
+  "sources": [
+    {"id": "oleg-rates-2026-10-21", "kind": "synthetic", "reference": "Учебные тарифы Олега app/oleg/data/rates.json, версия oleg-rates-2026-10-21: доставка, работы, резерв", "captured_at": "2026-10-21T12:00:00+03:00"}
+  ],
+  "suppliers": [
+    {"id": "store-1", "delivery_minor": 250000, "source_ids": ["oleg-rates-2026-10-21"]},
+    {"id": "store-2", "delivery_minor": 0, "source_ids": ["oleg-rates-2026-10-21"]},
+    {"id": "store-3", "delivery_minor": null, "source_ids": ["oleg-rates-2026-10-21"]}
+  ],
+  "labor": [
+    {"category": "preparation", "unit": "set", "max_quantity": "1", "amount_minor": 1000000, "title": "Подготовка основания комнаты, фиксированная цена", "source_ids": ["oleg-rates-2026-10-21"]},
+    {"category": "paint", "unit": "m2", "max_quantity": "60", "amount_minor": 1500000, "title": "Покраска стен комнаты до 60 м², фиксированная цена", "source_ids": ["oleg-rates-2026-10-21"]},
+    {"category": "laminate", "unit": "m2", "max_quantity": "25", "amount_minor": 1000000, "title": "Укладка ламината до 25 м², фиксированная цена", "source_ids": ["oleg-rates-2026-10-21"]}
+  ],
+  "reserve": {"version": "reserve-v1", "percent": "10", "source_ids": ["oleg-rates-2026-10-21"]}
+}

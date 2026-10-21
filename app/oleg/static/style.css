@@ -1,0 +1,19 @@
+:root { --fg: #1d1f23; --muted: #5d6470; --line: #d8dce3; --bg: #fff; --warn: #8a5a00; --bad: #a32020; --good: #1f6b35; --soft: #f4f6f9; }
+@media (prefers-color-scheme: dark) { :root { --fg: #e6e8ec; --muted: #a0a7b3; --line: #3a3f48; --bg: #16181c; --warn: #e0b050; --bad: #ff8080; --good: #7fd49a; --soft: #22252b; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; }
+main { max-width: 1200px; margin: 0 auto; padding: 16px; }
+h1 { margin: 0 0 4px; } h2 { margin: 24px 0 8px; font-size: 18px; }
+label { display: block; margin: 12px 0 4px; color: var(--muted); }
+textarea { width: 100%; font: 12px/1.4 ui-monospace, monospace; background: var(--soft); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+button { padding: 8px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); color: var(--fg); cursor: pointer; }
+.muted { color: var(--muted); } .notice { background: var(--soft); padding: 8px; border-radius: 6px; }
+.warning, .unknown td { color: var(--warn); } .error, .violated { color: var(--bad); font-weight: 600; } .satisfied { color: var(--good); font-weight: 600; }
+.badge { font-size: 13px; font-weight: normal; color: var(--muted); border: 1px solid var(--line); border-radius: 10px; padding: 1px 8px; margin-left: 8px; }
+.totals { display: grid; grid-template-columns: max-content auto; gap: 4px 16px; margin: 0; }
+.totals dt { color: var(--muted); } .totals dd { margin: 0; } .totals .total { font-size: 20px; font-weight: 700; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 6px; vertical-align: top; }
+pre { white-space: pre-wrap; font-size: 12px; background: var(--soft); padding: 8px; border-radius: 6px; }

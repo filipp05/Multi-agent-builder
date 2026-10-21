@@ -1,0 +1,24 @@
+{
+  "catalog_version": "oleg-catalog-2026-10-21",
+  "note": "Учебный снимок. Все цены, упаковки и даты вымышлены (synthetic) и не являются рыночной оценкой. Предложения primer, paint, floor совпадают с общим примером contracts/examples/completed.json.",
+  "sources": [
+    {"id": "demo-prices", "kind": "synthetic", "reference": "Вымышленные цены и доставка для проверки арифметики", "captured_at": "2026-10-20T20:00:00+03:00"},
+    {"id": "oleg-catalog-2026-10-21", "kind": "synthetic", "reference": "Учебный каталог Олега app/oleg/data/catalog.json, версия oleg-catalog-2026-10-21: вымышленные аналоги", "captured_at": "2026-10-21T12:00:00+03:00"}
+  ],
+  "offers": [
+    {"id": "primer", "supplier_id": "store-1", "category": "preparation", "compatibility_key": "dry-room", "pack_quantity": {"value": "1", "unit": "set"}, "price_minor": 400000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["demo-prices"]},
+    {"id": "paint", "supplier_id": "store-1", "category": "paint", "compatibility_key": "prepared-wall", "pack_quantity": {"value": "5", "unit": "l"}, "price_minor": 300000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["demo-prices"]},
+    {"id": "floor", "supplier_id": "store-1", "category": "laminate", "compatibility_key": "prepared-floor", "pack_quantity": {"value": "2.2", "unit": "m2"}, "price_minor": 200000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["demo-prices"]},
+    {"id": "primer-s1-deep", "supplier_id": "store-1", "category": "preparation", "compatibility_key": "dry-room", "pack_quantity": {"value": "1", "unit": "set"}, "price_minor": 450000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "paint-s1-matte", "supplier_id": "store-1", "category": "paint", "compatibility_key": "prepared-wall", "pack_quantity": {"value": "5", "unit": "l"}, "price_minor": 340000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "paint-s1-facade", "supplier_id": "store-1", "category": "paint", "compatibility_key": "facade", "pack_quantity": {"value": "5", "unit": "l"}, "price_minor": 150000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "floor-s1-oak", "supplier_id": "store-1", "category": "laminate", "compatibility_key": "prepared-floor", "pack_quantity": {"value": "2.2", "unit": "m2"}, "price_minor": 160000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "floor-s1-wet", "supplier_id": "store-1", "category": "laminate", "compatibility_key": "wet-room", "pack_quantity": {"value": "2.2", "unit": "m2"}, "price_minor": 120000, "currency": "RUB", "available_on": "2026-10-26", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "primer-s2", "supplier_id": "store-2", "category": "preparation", "compatibility_key": "dry-room", "pack_quantity": {"value": "1", "unit": "set"}, "price_minor": 380000, "currency": "RUB", "available_on": "2026-10-29", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "paint-s2", "supplier_id": "store-2", "category": "paint", "compatibility_key": "prepared-wall", "pack_quantity": {"value": "2.5", "unit": "l"}, "price_minor": 160000, "currency": "RUB", "available_on": "2026-10-29", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "paint-s2-kg", "supplier_id": "store-2", "category": "paint", "compatibility_key": "prepared-wall", "pack_quantity": {"value": "7", "unit": "kg"}, "price_minor": 280000, "currency": "RUB", "available_on": "2026-10-29", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "floor-s2", "supplier_id": "store-2", "category": "laminate", "compatibility_key": "prepared-floor", "pack_quantity": {"value": "2", "unit": "m2"}, "price_minor": 190000, "currency": "RUB", "available_on": "2026-10-29", "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "paint-s3", "supplier_id": "store-3", "category": "paint", "compatibility_key": "prepared-wall", "pack_quantity": {"value": "5", "unit": "l"}, "price_minor": 250000, "currency": "RUB", "available_on": null, "source_ids": ["oleg-catalog-2026-10-21"]},
+    {"id": "floor-s3", "supplier_id": "store-3", "category": "laminate", "compatibility_key": "prepared-floor", "pack_quantity": {"value": "2.2", "unit": "m2"}, "price_minor": 170000, "currency": "RUB", "available_on": null, "source_ids": ["oleg-catalog-2026-10-21"]}
+  ]
+}

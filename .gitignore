@@ -7,3 +7,4 @@ __pycache__/
 !.env.example
 .DS_Store
 .scratch/filipp-mvp/
+.scratch/oleg-mvp/
