@@ -11,4 +11,16 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r requirements-contracts.txt
-      - run: python -m pytest -q
+      - run: python -m pytest -q tests/test_contracts.py tests/test_handoff.py
+  app:
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.scratch/filipp-mvp/runtime/browsers
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-dev.txt
+      - run: python -m playwright install --with-deps chromium
+      - run: python -m pytest -q tests/filipp

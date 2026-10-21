@@ -1,0 +1,141 @@
+{
+  "$defs": {
+    "Ambiguity": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "value_conflict",
+            "semantic"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "field_path": {
+          "anyOf": [
+            {
+              "enum": [
+                "room.length_m",
+                "room.width_m",
+                "room.height_m",
+                "room.openings_m2",
+                "room.surface_condition",
+                "budget_minor",
+                "currency",
+                "region",
+                "start_date",
+                "deadline",
+                "hard_preferences",
+                "soft_preferences",
+                "excluded_work",
+                "calendar.timezone",
+                "calendar.work_weekdays",
+                "calendar.day_start_hour",
+                "calendar.hours_per_day",
+                "calendar.crew_count"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Field Path"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "field_path",
+        "message"
+      ],
+      "title": "Ambiguity",
+      "type": "object"
+    },
+    "FactCandidate": {
+      "additionalProperties": false,
+      "properties": {
+        "field_path": {
+          "enum": [
+            "room.length_m",
+            "room.width_m",
+            "room.height_m",
+            "room.openings_m2",
+            "room.surface_condition",
+            "budget_minor",
+            "currency",
+            "region",
+            "start_date",
+            "deadline",
+            "hard_preferences",
+            "soft_preferences",
+            "excluded_work",
+            "calendar.timezone",
+            "calendar.work_weekdays",
+            "calendar.day_start_hour",
+            "calendar.hours_per_day",
+            "calendar.crew_count"
+          ],
+          "title": "Field Path",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "input_id": {
+          "title": "Input Id",
+          "type": "string"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field_path",
+        "value",
+        "input_id",
+        "quote"
+      ],
+      "title": "FactCandidate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/FactCandidate"
+      },
+      "title": "Candidates",
+      "type": "array"
+    },
+    "ambiguities": {
+      "items": {
+        "$ref": "#/$defs/Ambiguity"
+      },
+      "title": "Ambiguities",
+      "type": "array"
+    },
+    "unsupported_requests": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unsupported Requests",
+      "type": "array"
+    }
+  },
+  "required": [
+    "candidates",
+    "ambiguities",
+    "unsupported_requests"
+  ],
+  "title": "Extraction",
+  "type": "object"
+}

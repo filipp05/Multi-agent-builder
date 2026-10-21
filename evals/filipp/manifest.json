@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "split_counts": {
+    "dev": 20,
+    "holdout": 10
+  },
+  "repeats": 3,
+  "thresholds": {
+    "precision": 0.98,
+    "recall": 0.98,
+    "clarification_recall": 1,
+    "success_rate": 0.95,
+    "stable_fraction": 0.9,
+    "latency_p95_s": 45
+  },
+  "thresholds_approved": true,
+  "holdout_blind": false,
+  "holdout_note": "Набор уже использован; повтор — регрессионная проверка, не новый слепой holdout.",
+  "q2": "resolved_scope_policy_v2",
+  "critical_errors_allowed": 0,
+  "script_revision": 4,
+  "script_revision_note": "Для сценариев редактирования задан expected_initial: если edit не отправлен, оценивается достигнутый шаг. Неуспех сохраняется."
+}

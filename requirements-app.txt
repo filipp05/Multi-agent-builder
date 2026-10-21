@@ -1,0 +1,5 @@
+-r requirements-contracts.txt
+fastapi==0.156.8
+pydantic==2.14.1
+Jinja2==3.1.6
+uvicorn==0.54.0
