@@ -56,7 +56,7 @@ def test_browser_exposes_intentional_errors_without_repairing_the_schedule(page,
     expect(page.locator('#outcome')).to_have_text('Есть нерешённые вопросы')
 
 
-def test_browser_shows_untrusted_titles_as_text_and_saves_preview(page):
+def test_browser_shows_untrusted_titles_as_text_and_saves_preview(page, tmp_path):
     import json
     page.get_by_text('Документы плана и проверка ошибок', exact=True).click()
     data = json.loads(page.locator('#bundle').input_value())
@@ -69,6 +69,6 @@ def test_browser_shows_untrusted_titles_as_text_and_saves_preview(page):
     page.get_by_text('Документы плана и проверка ошибок', exact=True).click()
     page.get_by_role('button', name='Построить график и проверить').click()
     expect(page.locator('#result')).to_be_visible()
-    output = ROOT/'.scratch/karina-mvp/results'
+    output = tmp_path/'preview'
     output.mkdir(parents=True, exist_ok=True)
     page.screenshot(path=str(output/'browser-preview.png'), full_page=True)
