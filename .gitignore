@@ -1,15 +1,9 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.venv/
+.venv
 .env
 .env.*
 !.env.example
 .DS_Store
-.scratch/filipp-mvp/
-.scratch/oleg-mvp/
-.scratch/karina-mvp/
-
-.scratch/deployment/
-.scratch/misha-mvp/
-.scratch/local-mvp/
+.scratch/

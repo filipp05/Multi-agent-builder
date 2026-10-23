@@ -7,17 +7,18 @@ from pathlib import Path
 import sqlite3
 from uuid import uuid4
 
-from app.filipp.repository import Conflict, NotFound
-from app.filipp.model import ModelError
-from app.misha.stages import SOURCE, generate_design, work_plan_handler, output
-from app.oleg import service as procurement
-from app.oleg.stages import load
-from app.karina import service as planning
+from app.brief.repository import Conflict, NotFound
+from app.brief.model import ModelError
+from app.design.scope import unsupported_exclusions, SCOPE_MESSAGE
+from app.design.stages import SOURCE, generate_design, work_plan_handler, output
+from app.procurement import service as procurement
+from app.procurement.stages import load
+from app.planning import service as planning
 from contracts.handoff import IDENTITY, make_context, call_stage
 from contracts.validate import validate_bundle
 
 ACTIVE = {'designing', 'planning', 'procurement', 'audit'}
-ERRORS = {'auth':'Провайдер не принял доступ к модели. Проверьте авторизацию и срок действия ключа.',
+ERRORS = {'unsupported_scope':SCOPE_MESSAGE, 'auth':'Провайдер не принял доступ к модели. Проверьте авторизацию и срок действия ключа.',
           'quota':'Лимит модели исчерпан или достигнут бюджет расходов. Проверьте квоты выбранного провайдера; повтор не выполняется автоматически.',
           'timeout':'Модель не ответила вовремя. Результаты предыдущих этапов сохранены.',
           'invalid_response':'Ответ модели не прошёл проверку схемы.',
@@ -86,6 +87,8 @@ class Pipeline:
             brief=self.repo.get_project(pid)
             if brief['status']!='confirmed' or brief['state_version']!=expected_version:
                 raise Conflict('Подтвердите актуальный бриф перед расчётом')
+            if unsupported_exclusions(brief['artifact']['payload']):
+                raise Conflict(SCOPE_MESSAGE)
             # One complete pipeline at a time. No unbounded queue of expensive runs.
             if self.tasks: raise Conflict('Другой расчёт ещё выполняется. Дождитесь завершения.')
             previous=self.store.get(pid)

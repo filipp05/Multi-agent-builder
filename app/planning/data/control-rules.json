@@ -1,0 +1,20 @@
+{
+  "version": "karina-control-v1",
+  "source": {
+    "id": "karina-control-v1",
+    "kind": "synthetic",
+    "reference": "app/planning/data/control-rules.json: независимый учебный эталон Карины; не строительные нормы и не рыночные цены",
+    "captured_at": "2026-10-23T12:00:00+03:00"
+  },
+  "recognized_price_sources": ["demo-prices", "oleg-rates-2026-10-21"],
+  "recognized_quantity_sources": ["demo-rules", "misha-tech-v1"],
+  "reserve_percent": "10",
+  "paint_litres_per_m2": "0.2",
+  "required_categories": ["preparation", "paint", "laminate"],
+  "labor": {
+    "preparation": {"unit": "set", "max_quantity": "1", "amount_minor": 1000000},
+    "paint": {"unit": "m2", "max_quantity": "60", "amount_minor": 1500000},
+    "laminate": {"unit": "m2", "max_quantity": "25", "amount_minor": 1000000}
+  },
+  "delivery_minor": {"store-1": 250000, "store-2": 0, "store-3": null}
+}

@@ -1,4 +1,4 @@
-name: Проверка контрактов
+name: Проверка приложения и контрактов
 on: [push, pull_request]
 permissions:
   contents: read
@@ -15,7 +15,7 @@ jobs:
   app:
     runs-on: ubuntu-latest
     env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.scratch/filipp-mvp/runtime/browsers
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.scratch/browsers
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,7 +23,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -r requirements-dev.txt
       - run: python -m playwright install --with-deps chromium
-      - run: python -m pytest -q tests/filipp
-      - run: python -m pytest -q tests/oleg
-      - run: python -m pytest -q tests/karina
-      - run: python -m pytest -q tests/misha
+      - run: python -m pytest -q tests/brief
+      - run: python -m pytest -q tests/procurement
+      - run: python -m pytest -q tests/planning
+      - run: python -m pytest -q tests/design
