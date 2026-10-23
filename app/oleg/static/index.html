@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Закупки и смета</title>
+<link rel="stylesheet" href="/oleg/static/style.css">
+<script src="/oleg/static/app.js" defer></script>
+</head>
+<body>
+<main>
+  <h1>Закупки и смета</h1>
+  <p class="muted">Этап C: план работ → корзина упаковок → смета с доставкой и резервом. Суммы считает код; модель только выбирает предложения и объясняет строки.</p>
+
+  <section>
+    <h2>Вход: комплект по договору 0.1.0</h2>
+    <p id="label" class="notice" hidden></p>
+    <label for="bundle">Комплект (нужны brief, design_options, design_selection, work_plan, sources, offers)</label>
+    <textarea id="bundle" rows="8" spellcheck="false"></textarea>
+    <label for="choices">Выбор предложений {requirement_id: offer_id} — для расчёта без модели</label>
+    <textarea id="choices" rows="4" spellcheck="false"></textarea>
+    <div class="buttons">
+      <button id="load" type="button">Загрузить учебный пример</button>
+      <button id="manual" type="button">Рассчитать по этому выбору</button>
+      <button id="model" type="button">Подобрать и объяснить моделью</button>
+    </div>
+    <p id="status" role="status"></p>
+  </section>
+
+  <section id="result" hidden>
+    <h2>Итог <span id="mode" class="badge"></span></h2>
+    <dl id="totals" class="totals"></dl>
+    <p id="partial" class="warning" hidden></p>
+    <p id="summary" hidden></p>
+
+    <h2>Покупки</h2>
+    <div class="scroll"><table id="purchases"><thead><tr>
+      <th>Потребность</th><th>Нужно с запасом</th><th>Предложение</th><th>Упаковка</th><th>Упаковок</th><th>Закупаем</th><th>Цена уп.</th><th>Сумма</th><th>Источник</th><th>Почему выбрано</th>
+    </tr></thead><tbody></tbody></table></div>
+
+    <h2>Доставка</h2>
+    <div class="scroll"><table id="deliveries"><thead><tr>
+      <th>Поставщик</th><th>Стоимость</th><th>Дата поставки</th><th>Источник</th>
+    </tr></thead><tbody></tbody></table></div>
+
+    <h2>Строки сметы</h2>
+    <div class="scroll"><table id="lines"><thead><tr>
+      <th>Статья</th><th>Вид</th><th>Ссылка</th><th>Сумма</th><th>Источник</th><th>Пояснение</th>
+    </tr></thead><tbody></tbody></table></div>
+
+    <h2>Допущения и ограничения</h2>
+    <ul id="assumptions"></ul>
+    <p id="room" class="muted"></p>
+
+    <details><summary>Документы procurement и estimate (JSON)</summary><pre id="raw"></pre></details>
+    <details id="log-box" hidden><summary>Журнал вызовов модели</summary><pre id="log"></pre></details>
+  </section>
+</main>
+</body>
+</html>
