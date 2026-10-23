@@ -4,9 +4,9 @@ from datetime import datetime, time
 from itertools import product
 from zoneinfo import ZoneInfo
 
-from app.oleg import agents, service
-from app.oleg.stages import load
-from app.karina.schedule import build_schedule
+from app.procurement import agents, service
+from app.procurement.stages import load
+from app.planning.schedule import build_schedule
 from contracts.handoff import make_context
 
 MAX_BASKETS = 128

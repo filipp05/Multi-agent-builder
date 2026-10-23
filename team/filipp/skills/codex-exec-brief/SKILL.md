@@ -13,7 +13,7 @@ description: Запускать и диагностировать локальн
 
 ## Перед запуском
 
-Работай из корня репозитория. Прочитай `app/filipp/model.py` (актуальные аргументы и изоляция) и `app/filipp/service.py` (схема источников). Для изменения извлечения дополнительно прочитай `app/filipp/prompts/brief.txt`, `app/filipp/schemas/extraction.schema.json` и `contracts/RULES.md`.
+Работай из корня репозитория. Прочитай `app/brief/model.py` (актуальные аргументы и изоляция) и `app/brief/service.py` (схема источников). Для изменения извлечения дополнительно прочитай `app/brief/prompts/brief.txt`, `app/brief/schemas/extraction.schema.json` и `contracts/RULES.md`.
 
 ```sh
 codex --version
@@ -38,13 +38,13 @@ python3.12 -m venv .venv
 Минимальная проверка с настоящей моделью:
 
 ```sh
-.venv/bin/python scripts/filipp_codex_smoke.py
+.venv/bin/python scripts/brief_codex_smoke.py
 ```
 
 Ожидается exit0 и `status=ok`; результат сохраняется локально в `.scratch/filipp-mvp/results/smoke.json` (следующий запуск перезапишет его). `--extraction` добавляет пробу извлечения; для полной пользовательской цепочки запускай приложение:
 
 ```sh
-.venv/bin/python -m uvicorn app.filipp.api:app --host 127.0.0.1 --port 8000
+.venv/bin/python -m uvicorn app.brief.api:app --host 127.0.0.1 --port 8000
 ```
 
 Открой `http://127.0.0.1:8000`: пожелания → уточнения → сводка → явное подтверждение. Продовый путь через Service дополняет JSON Schema точным enum доступных input_id; smoke с общей схемой не заменяет эту проверку.
@@ -62,7 +62,7 @@ python3.12 -m venv .venv
 Быстрые тесты без модели:
 
 ```sh
-.venv/bin/python -m pytest -q tests/filipp/test_model.py tests/filipp/test_reliability.py
+.venv/bin/python -m pytest -q tests/brief/test_model.py tests/brief/test_reliability.py
 ```
 
 Полный pytest включает Chromium; установи браузер в используемый тестами локальный каталог:
@@ -75,9 +75,9 @@ PLAYWRIGHT_BROWSERS_PATH="$PWD/.scratch/filipp-mvp/runtime/browsers" .venv/bin/p
 Настоящее измерение запускай отдельно и только в объёме задачи. Пример одного диагностического dev-сценария (имя каталога выбери новое):
 
 ```sh
-.venv/bin/python -m evals.filipp.run --split dev --limit 1 --repeats 1 --concurrency 1 --name codex-smoke-dev-001
+.venv/bin/python -m evals.brief.run --split dev --limit 1 --repeats 1 --concurrency 1 --name codex-smoke-dev-001
 ```
 
-Проверь `summary.json`, ошибки и gate: exit0 означает завершённый прогон, а не прохождение приёмки. Полная регрессия —20dev+10известных holdout, по3повтора, пороги в `evals/filipp/manifest.json`. Исходники и параметры замораживаются; после изменений используй новое имя запуска, сохраняй прежние неудачи.
+Проверь `summary.json`, ошибки и gate: exit0 означает завершённый прогон, а не прохождение приёмки. Полная регрессия —20dev+10известных holdout, по3повтора, пороги в `evals/brief/manifest.json`. Исходники и параметры замораживаются; после изменений используй новое имя запуска, сохраняй прежние неудачи.
 
 В результате работы укажи версию CLI/модель, что реально запустила, ошибки и ограничения, пути локальных результатов. Разделяй тесты без модели, настоящий Codex и платную разметку. Секреты, SQLite, логи, ответы и личные настройки остаются локально.
