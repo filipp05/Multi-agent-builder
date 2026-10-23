@@ -10,7 +10,7 @@ import uuid
 
 import httpx
 from jsonschema import Draft202012Validator, FormatChecker
-from app.filipp.model import ModelError, ModelReply
+from app.brief.model import ModelError, ModelReply
 
 # USD per million tokens, Standard Ohio. Override explicitly when changing models.
 RATES = {'amazon.nova-lite-v1:0': ('0.06', '0.24'),

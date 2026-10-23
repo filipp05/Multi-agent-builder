@@ -7,12 +7,12 @@ from fastapi import Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
-from app.filipp.api import create_app as brief_app
-from app.filipp.model import CodexModel
+from app.brief.api import create_app as brief_app
+from app.brief.model import CodexModel
 from app.providers.bedrock import BedrockModel
 from app.pipeline import Pipeline
-from app.oleg import api as oleg
-from app.karina.api import configure as configure_karina
+from app.procurement import api as oleg
+from app.planning.api import configure as configure_karina
 
 BASE=Path(__file__).parent
 class PlanCommand(BaseModel):

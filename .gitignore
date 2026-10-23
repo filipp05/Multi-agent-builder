@@ -6,10 +6,4 @@ __pycache__/
 .env.*
 !.env.example
 .DS_Store
-.scratch/filipp-mvp/
-.scratch/oleg-mvp/
-.scratch/karina-mvp/
-
-.scratch/deployment/
-.scratch/misha-mvp/
-.scratch/local-mvp/
+.scratch/
