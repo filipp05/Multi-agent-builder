@@ -15,7 +15,7 @@ from app.filipp.types import CreateCommand,CommandMeta,AnswersCommand,EditComman
 
 BASE=Path(__file__).parent
 
-def create_app(db_path=None,model=None):
+def create_app(db_path=None,model=None,allowed_hosts=None):
     repo=Repository(db_path or BASE.parents[1]/'.scratch/filipp-mvp/runtime/app.sqlite3')
     @asynccontextmanager
     async def lifespan(app):
@@ -25,7 +25,7 @@ def create_app(db_path=None,model=None):
         await app.state.service.close()
     app=FastAPI(lifespan=lifespan)
     app.state.repo=repo
-    app.add_middleware(TrustedHostMiddleware,allowed_hosts=['localhost','127.0.0.1','testserver'])
+    app.add_middleware(TrustedHostMiddleware,allowed_hosts=allowed_hosts or ['localhost','127.0.0.1','testserver'])
     app.mount('/static',StaticFiles(directory=BASE/'static'),name='static')
     templates=Jinja2Templates(directory=BASE/'templates')
     @app.middleware('http')

@@ -14,10 +14,10 @@ from app.filipp.stages import build_confirmed_brief
 from app.filipp.types import Extraction
 
 BASE=Path(__file__).parent
-ERRORS={'auth':'Войдите в Codex через ChatGPT и повторите.', 'quota':'Лимит подписки исчерпан. Повторите позже вручную.',
- 'timeout':'Codex не ответил вовремя. Ввод сохранён.', 'execution':'Ошибка запуска Codex. Ввод сохранён.',
+ERRORS={'auth':'Проверьте авторизацию выбранного провайдера модели.', 'quota':'Лимит модели исчерпан. Проверьте квоты провайдера и повторите позже вручную.',
+ 'timeout':'Модель не ответила вовремя. Ввод сохранён.', 'execution':'Ошибка вызова модели. Ввод сохранён.',
  'cli_missing':'Codex CLI не найден.', 'invalid_response':'Ответ модели не прошёл проверку. Ввод сохранён.',
- 'output_limit':'Ответ Codex превысил допустимый размер.', 'temporary':'Временная ошибка после повторных попыток.'}
+ 'output_limit':'Ответ модели превысил допустимый размер.', 'temporary':'Временная ошибка после повторных попыток.'}
 
 def new_input(text,fields=None,field_path=None):
     return {'id':str(uuid4()),'text':text,'fields':fields or {},'field_path':field_path,

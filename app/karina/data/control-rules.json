@@ -7,7 +7,7 @@
     "captured_at": "2026-10-23T12:00:00+03:00"
   },
   "recognized_price_sources": ["demo-prices", "oleg-rates-2026-10-21"],
-  "recognized_quantity_sources": ["demo-rules"],
+  "recognized_quantity_sources": ["demo-rules", "misha-tech-v1"],
   "reserve_percent": "10",
   "paint_litres_per_m2": "0.2",
   "required_categories": ["preparation", "paint", "laminate"],
