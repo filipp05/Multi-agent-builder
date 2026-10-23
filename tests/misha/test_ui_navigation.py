@@ -96,7 +96,7 @@ def test_download_stale_and_mobile(ui):
     expect(page.locator('#concepts article')).to_have_count(2)
     expect(page.locator('.color-chips svg')).to_have_count(4)
     page.get_by_role('button',name='Выбрать и рассчитать').first.click()
-    expect(page.locator('#status')).to_have_text('План прошёл проверки',timeout=15000)
+    expect(page.locator('#status')).to_have_text('План рассчитан: есть ограничения',timeout=15000)
     expect(page.locator('#result')).to_contain_text('Резерв 10%')
     expect(page.locator('#result')).to_contain_text('Краска ·')
     page.get_by_text('Скачать данные проекта',exact=True).click()

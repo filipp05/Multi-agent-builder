@@ -37,18 +37,55 @@ def test_complete_flow_and_reload(tmp_path):
         page.get_by_role('button',name='Получить две концепции').click()
         expect(page.locator('#concepts article')).to_have_count(2)
         page.get_by_role('button',name='Выбрать и рассчитать').first.click()
-        expect(page.locator('#status')).to_have_text('План прошёл проверки',timeout=15000)
+        expect(page.locator('#status')).to_have_text('План рассчитан: есть ограничения',timeout=15000)
         expect(page.locator('#stages li')).to_have_count(8)
-        expect(page.locator('#result')).to_contain_text('Независимый аудит: пройден')
+        expect(page.locator('#result')).to_contain_text('Независимый аудит: есть непроверенные условия')
         assert page.evaluate('window.bad') is None
         assert not errors,errors
         before=page.locator('#documents').text_content()
         page.reload()
-        expect(page.locator('#status')).to_have_text('План прошёл проверки')
+        expect(page.locator('#status')).to_have_text('План рассчитан: есть ограничения')
         expect(page.locator('#documents')).to_have_text(before)
         target=Path('.scratch/misha-mvp/results');target.mkdir(parents=True,exist_ok=True)
         page.screenshot(path=str(target/'browser-preview.png'),full_page=True)
         page.set_viewport_size({'width':390,'height':844})
         page.screenshot(path=str(target/'browser-mobile.png'),full_page=True)
         assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+        browser.close()
+
+
+def test_revised_basket_history_and_incomplete_export(tmp_path):
+    import json
+    from test_integration_repairs import confirmed
+    with TestClient(create_app(data_dir=tmp_path,model=Model())) as client, sync_playwright() as pw:
+        brief = confirmed(client, 7000000)
+        browser = pw.chromium.launch(headless=True)
+        page = browser.new_page(viewport={'width':390,'height':844})
+        def route(r):
+            req=r.request
+            response=client.request(req.method,urlsplit(req.url).path,content=req.post_data,
+                                    headers={'content-type':'application/json'})
+            r.fulfill(status=response.status_code,body=response.content,
+                      headers={'content-type':response.headers.get('content-type','text/plain')})
+        page.route('**/*',route)
+        page.goto('http://localhost/plan')
+        page.get_by_role('button',name='Получить две концепции').click()
+        expect(page.locator('#concepts article')).to_have_count(2)
+        page.get_by_role('button',name='Выбрать и рассчитать').first.click()
+        expect(page.locator('#status')).to_have_text('План рассчитан: есть ограничения',timeout=30000)
+        expect(page.locator('#result')).to_contain_text('Варианты расчёта: 2')
+        expect(page.locator('#result')).to_contain_text('В каталоге не подтверждены оттенки')
+        assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')
+        page.locator('#technical > summary').click()
+        with page.expect_download() as info:
+            page.locator('#download').click()
+        path=tmp_path/'export.json';info.value.save_as(path)
+        exported=json.loads(path.read_text())
+        assert exported['status']=='constraints_unresolved'
+        estimate=next(a['payload'] for a in exported['artifacts'] if a['kind']=='estimate')
+        assert estimate['total_minor'] <= 7000000
+        target=Path('.scratch/mvp-minor-fixes/results');target.mkdir(parents=True,exist_ok=True)
+        page.screenshot(path=str(target/'revised-mobile.png'),full_page=True)
+        page.reload()
+        expect(page.locator('#result')).to_contain_text('Варианты расчёта: 2')
         browser.close()

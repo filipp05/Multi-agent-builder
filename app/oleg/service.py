@@ -9,6 +9,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from contracts.handoff import IDENTITY, call_stage, make_context
 from contracts.validate import ROOT as CONTRACTS, index, validate_bundle
 from app.oleg import agents, calc, check
+from app.input_validation import require_object_lists
 from app.oleg.stages import artifact_of, estimate_handler, load, need_with_waste, procurement_handler
 
 UPSTREAM = ('brief', 'design_options', 'design_selection', 'work_plan')
@@ -48,6 +49,7 @@ def example_choices():
 
 def contexts_from(bundle, rates):
     """Проверить присланный снимок и построить контекст procurement. Тарифы Олега добавляются к источникам явно."""
+    require_object_lists(bundle)
     for key in ('artifacts', 'sources', 'offers', *IDENTITY):
         if key not in bundle:
             raise ValueError(f'В комплекте нет поля {key}')

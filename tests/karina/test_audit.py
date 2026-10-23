@@ -17,8 +17,10 @@ def codes(result):
     return {f['code'] for f in result['findings']}
 
 
-def test_reference_costs_and_schedule_pass_independent_program_checks():
-    assert review(bundle()) == {'status': 'passed', 'findings': []}
+def test_reference_numbers_do_not_confirm_missing_material_properties():
+    result = review(bundle())
+    assert result['status'] == 'incomplete'
+    assert codes(result) == {'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'}
 
 
 @pytest.mark.parametrize('fault, expected', [
@@ -98,8 +100,8 @@ def test_expensive_correct_plan_is_distinct_from_arithmetic_error():
     payload(data, 'brief')['budget_minor'] = 7000000
     payload(data, 'estimate')['budget_status'] = 'violated'
     result = review(data)
-    assert result['status'] == 'passed'
-    assert codes(result) == {'BUDGET_EXCEEDED'}
+    assert result['status'] == 'incomplete'
+    assert codes(result) == {'BUDGET_EXCEEDED', 'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'}
     assert result['findings'][0]['severity'] == 'warning'
 
 
@@ -108,7 +110,8 @@ def test_program_only_handler_cannot_confirm_overall_success():
     result, doc = call_stage(audit_handler(), context)
     assert result['status'] == 'ok' and doc['payload']['status'] == 'incomplete'
     _, checked = call_stage(audit_handler(semantic_findings=[]), context)
-    assert checked['payload']['status'] == 'passed'
+    assert checked['payload']['status'] == 'incomplete'
+    assert codes(checked['payload']) == {'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'}
 
 
 def test_malformed_payload_is_reported_without_arithmetic_crash():

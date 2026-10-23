@@ -101,7 +101,9 @@ async def check_handoff(directory, model):
                     checks['deadline_violated'] = view['deadline_status'] == 'violated'
             else:
                 independent = inspect(karina.audit_context(result['bundle']))
-                checks['program_audit_passed'] = independent == {'status': 'passed', 'findings': []}
+                checks['program_audit_honest'] = (independent['status'] == 'incomplete' and
+                    {f['code'] for f in independent['findings']} ==
+                    {'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'})
                 validate_bundle(result['bundle'])
                 checks['eight_handoffs'] = len(verify_handoffs(result['bundle'])) == 8
             if model:

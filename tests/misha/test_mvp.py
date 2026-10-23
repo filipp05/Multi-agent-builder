@@ -63,9 +63,9 @@ async def build(concept='calm',surface='prepared',budget=8000000):
 @pytest.mark.asyncio
 async def test_full_contract_and_independent_audit():
     out,model=await build()
-    assert out['bundle']['status']=='completed'
+    assert out['bundle']['status']=='constraints_unresolved'
     validate_bundle(out['bundle'])
-    assert out['audit']['payload']['status']=='passed'
+    assert out['audit']['payload']['status']=='incomplete'
     assert len(model.calls)==5
 
 @pytest.mark.asyncio
@@ -140,9 +140,9 @@ async def test_pipeline_idempotency_restart_history_and_stale(tmp_path):
     same=await p.start(pid,'design',2)
     assert same['run_id']==first['run_id'] and len(m.calls)==1
     selected=await p.start(pid,'pick',2,'calm',first['run_id']);await drain(p)
-    assert p.current(pid)['status']=='completed'
+    assert p.current(pid)['status']=='constraints_unresolved'
     p2=Pipeline(repo,m,tmp_path/'p.db')
-    assert p2.current(pid)['bundle']['status']=='completed'
+    assert p2.current(pid)['bundle']['status']=='constraints_unresolved'
     assert len(p2.store.history(pid))==2
     repo.project['status']='waiting_input'
     assert p2.current(pid)['stale']

@@ -32,7 +32,7 @@ async def test_fresh_oleg_results_pass_karina_and_all_shared_handoffs():
     assert generated['estimate']['payload']['total_minor'] == 7425000
     assert [p['pack_count'] for p in generated['procurement']['payload']['purchases']] == [1, 2, 10]
     assert result['view']['finish_at'] == '2026-10-28T17:00:00+03:00'
-    assert result['view']['status'] == 'completed' and result['view']['findings'] == []
+    assert result['view']['status'] == 'constraints_unresolved' and {f['code'] for f in result['view']['findings']} == {'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'}
     schedule = result['schedule']
     audit = result['audit']
     assert generated['procurement']['artifact_id'] in schedule['input_artifact_ids']
@@ -61,7 +61,7 @@ def test_fresh_documents_cross_both_public_http_apis():
         assert response.status_code == 200, response.text
         result = response.json()
     assert payload(result['bundle'], 'estimate')['total_minor'] == 7425000
-    assert result['bundle']['status'] == 'completed'
+    assert result['bundle']['status'] == 'constraints_unresolved'
     assert len(model.requests) == 2
     assert len(verify_handoffs(result['bundle'])) == 8
 
@@ -72,7 +72,7 @@ async def test_fresh_handoff_without_semantic_model_stays_incomplete():
     result = await karina.run(incoming)
     assert result['audit']['payload']['status'] == 'incomplete'
     assert result['bundle']['status'] == 'constraints_unresolved'
-    assert inspect(karina.audit_context(result['bundle'])) == {'status': 'passed', 'findings': []}
+    assert inspect(karina.audit_context(result['bundle']))['status'] == 'incomplete'
     validate_bundle(result['bundle'])
 
 
@@ -128,12 +128,12 @@ async def test_alternative_fresh_baskets_and_unknown_delivery(choices, total, st
         assert result['bundle']['status'] == 'constraints_unresolved'
         assert {'UNKNOWN_DELIVERY_COST', 'UNKNOWN_DELIVERY_DATE'} <= {f['code'] for f in result['view']['findings']}
     elif deadline_status == 'violated':
-        assert result['audit']['payload']['status'] == 'passed'
+        assert result['audit']['payload']['status'] == 'incomplete'
         assert result['bundle']['status'] == 'constraints_unresolved'
         assert result['view']['finish_at'] == '2026-11-02T17:00:00+03:00'
-        assert {f['code'] for f in result['view']['findings']} == {'DEADLINE_EXCEEDED'}
+        assert {f['code'] for f in result['view']['findings']} == {'DEADLINE_EXCEEDED', 'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'}
         validate_bundle(result['bundle'])
     else:
-        assert result['view']['findings'] == []
-        assert result['bundle']['status'] == 'completed'
+        assert {f['code'] for f in result['view']['findings']} == {'UNVERIFIED_FINISH', 'UNDISCLOSED_PREPARATION_KIT'}
+        assert result['bundle']['status'] == 'constraints_unresolved'
         validate_bundle(result['bundle'])

@@ -46,7 +46,7 @@ def test_model_path_returns_a_complete_bundle_and_two_separate_contexts():
     response = client(model).post('/karina/api/run', json={'bundle': bundle(), 'use_model': True, 'calendar_wishes': 'Объясните срок'})
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data['view']['status'] == 'completed' and data['audit']['payload']['status'] == 'passed'
+    assert data['view']['status'] == 'constraints_unresolved' and data['audit']['payload']['status'] == 'incomplete'
     assert len(model.requests) == 2
     assert len(verify_handoffs(data['bundle'])) == 8
     assert model.requests[0].data['calendar_wishes'] == 'Объясните срок'
@@ -163,6 +163,6 @@ def test_midnight_shift_end_passes_the_shared_integration_validator():
     payload(data, 'brief')['calendar']['day_start_hour'] = 16
     response = client().post('/karina/api/run', json={'bundle': data, 'use_model': True})
     result = response.json()
-    assert result['view']['status'] == 'completed'
+    assert result['view']['status'] == 'constraints_unresolved'
     assert result['view']['finish_at'] == '2026-10-29T00:00:00+03:00'
     validate_bundle(result['bundle'])

@@ -49,10 +49,16 @@ async def choose_offers(model, context, rates):
     work = artifact_of(context, 'work_plan')['payload']
     brief = artifact_of(context, 'brief')['payload']
     options = candidates(context, rates)
+    selection = artifact_of(context, 'design_selection')['payload']['concept_id']
+    concept = next(c for c in artifact_of(context, 'design_options')['payload']['concepts']
+                   if c['id'] == selection)
     data = {'requirements': [{'id': r['id'], 'category': r['category'], 'need_with_waste': {'value': need_with_waste(r), 'unit': r['base_quantity']['unit']}}
                              for r in work['requirements']],
             'candidates': options, 'budget_minor': brief['budget_minor'], 'start_date': brief['start_date'],
-            'hard_preferences': brief['hard_preferences'], 'soft_preferences': brief['soft_preferences']}
+            'hard_preferences': brief['hard_preferences'], 'soft_preferences': brief['soft_preferences'],
+            'selected_concept': concept,
+            'catalogue_limitations': 'Оттенки, декор и состав комплектов в текущем снимке не подтверждены. '
+                'Не объявляй соответствие палитре или полноту расходников установленными фактами.'}
     reply = await model.generate(ModelRequest((PROMPTS/'procurement.txt').read_text(encoding='utf-8'), data, CHOICE_SCHEMA, 120))
     choices, reasons = {}, {}
     for item in reply.data['choices']:

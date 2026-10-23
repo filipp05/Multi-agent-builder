@@ -15,6 +15,7 @@ from app.oleg.stages import load
 from app.karina import service as planning
 from contracts.handoff import IDENTITY, make_context, call_stage
 from contracts.validate import validate_bundle
+from app.basket_revision import alternative, limits
 
 ACTIVE = {'designing', 'planning', 'procurement', 'audit'}
 ERRORS = {'auth':'Провайдер не принял доступ к модели. Проверьте авторизацию и срок действия ключа.',
@@ -114,6 +115,54 @@ class Pipeline:
         return make_context(b,stage,b['artifacts'],b['sources'],b['offers'],selected_concept_id=selected)
     def record(self,state,status):
         self.fresh(state);state['status']=status;self.store.save(state)
+    async def finish_plan(self, state):
+        """Original basket plus at most two revisions, within the same time budget."""
+        upstream = deepcopy(state['bundle']['artifacts'])
+        choices, tried = None, []
+        state['basket_attempts'] = []
+        reason = 'Исходный выбор снабженца.'
+        for attempt in range(3):
+            self.fresh(state)
+            state['bundle']['artifacts'] = deepcopy(upstream)
+            # Do not display explanations or prices from a previous attempt.
+            for key in ('purchases', 'estimate_explanation', 'planner', 'controller'):
+                state.pop(key, None)
+            self.record(state, 'procurement')
+            purchases = await procurement.run(state['bundle'], model=self.model, choices=choices)
+            self.fresh(state)
+            state['bundle']['sources'] = purchases['sources']
+            state['bundle']['artifacts'] += [purchases['procurement'], purchases['estimate']]
+            state['purchases'] = purchases['view']
+            state['estimate_explanation'] = purchases['explanations']
+            state['model_log'] += purchases['model_log']
+            self.record(state, 'audit')
+            reviewed = await planning.run(state['bundle'], model=self.model)
+            self.fresh(state)
+            state['bundle'] = reviewed['bundle']
+            state['model_log'] += reviewed['model_log']
+            state['planner'], state['controller'] = reviewed['planner'], reviewed['controller']
+            tried.append(purchases['choices'])
+            state['basket_attempts'].append({
+                'number': attempt + 1, 'reason': reason, 'choices': purchases['choices'],
+                'total_minor': purchases['estimate']['payload']['total_minor'],
+                'finish_at': reviewed['schedule']['payload']['finish_at'],
+                'status': reviewed['bundle']['status'], 'bundle': deepcopy(reviewed['bundle'])})
+            self.store.save(state)
+            if limits(state['bundle']) in (None, (0, 0)):
+                state['revision_note'] = ('Бюджет и срок соблюдены. Остальные замечания показаны в аудите.'
+                                          if limits(state['bundle']) == (0, 0) else
+                                          'Для автоматического пересмотра недостаточно подтверждённых сумм или дат.')
+                break
+            if attempt == 2:
+                state['revision_note'] = 'Достигнут предел двух пересмотров. Ограничения требуют решения пользователя.'
+                break
+            choices, reason = await alternative(state['bundle'], tried)
+            if choices is None:
+                state['revision_note'] = reason
+                break
+        if state['bundle']['status'] == 'completed':
+            validate_bundle(state['bundle'])
+        self.record(state, state['bundle']['status'])
     async def _run(self,state):
         try:
             async with asyncio.timeout(480):
@@ -129,20 +178,7 @@ class Pipeline:
                 result,work=call_stage(work_plan_handler(),self.context(state,'work_plan'))
                 if result['status']!='ok':raise ValueError(result['error']['message'])
                 state['bundle']['artifacts'].append(work)
-                self.record(state,'procurement')
-                purchases=await procurement.run(state['bundle'],model=self.model)
-                self.fresh(state)
-                state['bundle']['sources']=purchases['sources']
-                state['bundle']['artifacts'] += [purchases['procurement'],purchases['estimate']]
-                state['purchases']=purchases['view'];state['estimate_explanation']=purchases['explanations']
-                state['model_log']+=purchases['model_log']
-                self.record(state,'audit')
-                reviewed=await planning.run(state['bundle'],model=self.model)
-                self.fresh(state)
-                state['bundle']=reviewed['bundle'];state['model_log']+=reviewed['model_log']
-                state['planner']=reviewed['planner'];state['controller']=reviewed['controller']
-                if state['bundle']['status']=='completed':validate_bundle(state['bundle'])
-                self.record(state,state['bundle']['status'])
+                await self.finish_plan(state)
         except asyncio.CancelledError:
             state.update(status='interrupted',error='Расчёт остановлен. Предыдущие результаты сохранены.')
             self.store.save(state);raise

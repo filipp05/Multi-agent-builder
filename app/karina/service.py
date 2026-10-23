@@ -8,6 +8,7 @@ from jsonschema import ValidationError
 from contracts.handoff import IDENTITY, call_stage, make_context
 from contracts.validate import validate_bundle
 from app.karina import agents
+from app.input_validation import require_object_lists
 from app.karina.audit import load_rules
 from app.karina.common import InputError, ROOT, require
 from app.karina.schedule import build_schedule
@@ -28,6 +29,7 @@ def example_bundle():
 
 
 def snapshot(bundle):
+    require_object_lists(bundle)
     require(isinstance(bundle, dict), 'Нужен комплект документов', 'bundle')
     for key in (*IDENTITY, 'artifacts', 'sources', 'offers'):
         require(key in bundle, f'В комплекте нет поля {key}', f'bundle.{key}')

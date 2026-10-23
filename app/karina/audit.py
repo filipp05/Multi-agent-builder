@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 from contracts.handoff import IDENTITY
 from contracts.validate import DEPENDENCIES
 from app.karina.common import documents, schema_errors
+from app.input_validation import require_object_lists
 
 
 def load_rules():
@@ -40,6 +41,7 @@ class Report:
 
 
 def inspect(context, rules=None):
+    require_object_lists({'artifacts': documents(context), 'sources': context['sources'], 'offers': context['offers']})
     rules = rules or load_rules()
     docs = {a['kind']: a for a in documents(context)}
     report = Report(docs)
@@ -113,6 +115,19 @@ def inspect(context, rules=None):
         report.add('UNKNOWN_CONCEPT', 'Выбрана несуществующая концепция. Повторите выбор.', 'design_selection', owner='filipp')
     elif not set(brief['hard_preferences']) <= set(chosen['hard_preferences_met']):
         report.add('LOST_PREFERENCE', 'Концепция не покрывает обязательные пожелания. Исправьте концепцию или согласуйте изменение требований.', 'design_options', owner='misha')
+    # Contract 0.1.0 contains no verified colour/decor or kit-content evidence.
+    # A fluent model explanation must not turn this absence into a passed audit.
+    if chosen and chosen.get('colors'):
+        report.add('UNVERIFIED_FINISH',
+                   'В каталоге не подтверждены оттенки краски и декор ламината для выбранной концепции. '
+                   'Уточните соответствие палитре и стоимость колеровки; до этого план неполный.',
+                   'procurement', owner='oleg', incomplete=True)
+    if any(r['category'] == 'preparation' for r in work['requirements']):
+        report.add('UNDISCLOSED_PREPARATION_KIT',
+                   'Состав подготовительного комплекта не раскрыт. Подтвердите защитные расходники '
+                   'и необходимые комплектующие для пола: что включено, уже есть или не требуется. '
+                   'До подтверждения комплектность и итоговая стоимость предварительные.',
+                   'work_plan', owner='misha', incomplete=True)
 
     categories = {r['category'] for r in reqs.values()}
     for category in set(rules['required_categories'])-categories:
