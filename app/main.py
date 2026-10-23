@@ -26,7 +26,7 @@ def create_app(*, data_dir=None,model=None,allowed_hosts=None):
     data=Path(data_dir or os.environ.get('RENOVATION_DATA_DIR','.scratch/deployment'))
     if model is None:
         provider=os.environ.get('MODEL_PROVIDER','bedrock')
-        if provider=='codex':model=CodexModel()
+        if provider=='codex':model=CodexModel(model=os.environ.get('CODEX_MODEL_ID','gpt-6-astra'))
         elif provider=='bedrock':
             model=BedrockModel(region=os.environ.get('AWS_REGION','us-east-2'),
                 model=os.environ.get('BEDROCK_MODEL_ID','amazon.nova-lite-v1:0'),ledger=data/'usage.sqlite3',
