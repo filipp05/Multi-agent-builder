@@ -1,6 +1,4 @@
 """Karina browser acceptance using an explicit model double."""
-import os
-from pathlib import Path
 
 from fastapi.testclient import TestClient
 from playwright.sync_api import sync_playwright, expect
@@ -9,8 +7,6 @@ import pytest
 from app.planning.api import create_app
 from karina_helpers import FakeModel
 
-ROOT = Path(__file__).resolve().parents[2]
-os.environ['PLAYWRIGHT_BROWSERS_PATH'] = str(ROOT/'.scratch/filipp-mvp/runtime/browsers')
 
 
 @pytest.fixture
