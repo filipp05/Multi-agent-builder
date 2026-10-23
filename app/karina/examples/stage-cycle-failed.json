@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "project_id": "demo-project",
+  "run_id": "demo-run",
+  "revision": 1,
+  "stage": "schedule",
+  "questions": [],
+  "status": "failed",
+  "artifact_id": null,
+  "error": {
+    "code": "INVALID_INPUT",
+    "message": "Цикл в графе работ",
+    "retryable": false,
+    "field_paths": [
+      "work_plan.tasks.predecessor_ids"
+    ]
+  }
+}

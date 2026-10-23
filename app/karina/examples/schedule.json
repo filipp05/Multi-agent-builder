@@ -1,0 +1,43 @@
+{
+  "schema_version": "0.1.0",
+  "project_id": "demo-project",
+  "run_id": "demo-run",
+  "revision": 1,
+  "kind": "schedule",
+  "artifact_id": "karina-schedule-example",
+  "input_artifact_ids": [
+    "a-brief",
+    "a-procurement",
+    "a-work_plan"
+  ],
+  "source_ids": [
+    "demo-rules"
+  ],
+  "assumptions": [
+    "Доступность материалов трактуется как поставка к началу рабочего дня указанной даты. Одна бригада; праздники и перерывы не моделируются."
+  ],
+  "payload": {
+    "items": [
+      {
+        "task_id": "prepare",
+        "start_at": "2026-10-26T09:00:00+03:00",
+        "finish_at": "2026-10-26T17:00:00+03:00",
+        "crew_id": "crew-1"
+      },
+      {
+        "task_id": "paint-task",
+        "start_at": "2026-10-27T09:00:00+03:00",
+        "finish_at": "2026-10-27T17:00:00+03:00",
+        "crew_id": "crew-1"
+      },
+      {
+        "task_id": "floor-task",
+        "start_at": "2026-10-28T09:00:00+03:00",
+        "finish_at": "2026-10-28T17:00:00+03:00",
+        "crew_id": "crew-1"
+      }
+    ],
+    "finish_at": "2026-10-28T17:00:00+03:00",
+    "deadline_status": "satisfied"
+  }
+}

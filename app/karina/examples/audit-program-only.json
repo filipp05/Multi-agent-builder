@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1.0",
+  "project_id": "demo-project",
+  "run_id": "demo-run",
+  "revision": 1,
+  "kind": "audit",
+  "artifact_id": "karina-audit-example",
+  "input_artifact_ids": [
+    "a-brief",
+    "a-design_options",
+    "a-design_selection",
+    "a-work_plan",
+    "a-procurement",
+    "a-estimate",
+    "karina-schedule-example"
+  ],
+  "source_ids": [
+    "karina-control-v1"
+  ],
+  "assumptions": [
+    "Контрольные количества, статьи, упаковки, суммы и занятость бригады проверены отдельным алгоритмом Карины. Цены и нормы учебные.",
+    "Выполнена только программная проверка; смысловой LLM-контролёр не запускался. Общий успех не подтверждён."
+  ],
+  "payload": {
+    "status": "incomplete",
+    "findings": []
+  }
+}

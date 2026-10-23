@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>График и контроль ремонта</title>
+  <link rel="stylesheet" href="/karina/static/style.css">
+  <script src="/karina/static/app.js" defer></script>
+</head>
+<body><main>
+  <header><p class="eyebrow">РЕМОНТ ПОД КОНТРОЛЕМ · КАРИНА</p><h1>Когда закончим<br>и всё ли учли?</h1>
+    <p class="intro">Календарь одной бригады, поставки и технологические паузы. Независимая проверка плана перед началом ремонта.</p></header>
+  <section class="card" aria-labelledby="input-title">
+    <div class="section-top"><h2 id="input-title">Исходный план</h2><button id="load" class="secondary" type="button">Загрузить пример</button></div>
+    <p id="example-note" class="notice"></p>
+    <div class="controls">
+      <label>Начало ремонта<input id="start-date" type="date"></label>
+      <label>Желаемое окончание<input id="deadline" type="date"></label>
+      <label>Начало рабочего дня<input id="day-hour" type="number" min="0" max="23"></label>
+      <label>Часов в день<input id="day-hours" type="number" min="1" max="12"></label>
+    </div>
+    <fieldset id="weekdays"><legend>Рабочие дни</legend>
+      <label><input type="checkbox" value="0">Пн</label><label><input type="checkbox" value="1">Вт</label>
+      <label><input type="checkbox" value="2">Ср</label><label><input type="checkbox" value="3">Чт</label>
+      <label><input type="checkbox" value="4">Пт</label><label><input type="checkbox" value="5">Сб</label>
+      <label><input type="checkbox" value="6">Вс</label>
+    </fieldset>
+    <label>Пожелания к календарю<textarea id="wishes" rows="2" placeholder="Например: объясните, успеем ли до пятницы"></textarea></label>
+    <p class="muted">Модель объяснит пожелания относительно указанного календаря. Изменения дат и часов задайте в полях выше.</p>
+    <label class="model-option"><input id="use-model" type="checkbox">Подключить настоящую модель для объяснения и смысловой проверки</label>
+    <p class="muted">Используется настроенный в приложении Codex через ChatGPT. Без модели выполняются программные проверки; окончательный успех не подтверждается.</p>
+    <details><summary>Документы плана и проверка ошибок</summary>
+      <label>Комплект в JSON<textarea id="bundle" rows="12" spellcheck="false"></textarea></label>
+      <label>Пример для проверки<select id="fault"><option value="none">Без изменений</option><option value="missing-line">Пропустить строку сметы</option><option value="duplicate-line">Повторить строку сметы</option><option value="late-delivery">Поставка позже начала работ</option><option value="broken-wait">Нарушить технологическую паузу</option></select></label>
+      <button id="inject" class="secondary" type="button">Внести ошибку в документы</button>
+      <p class="muted">Чтобы проверить испорченный график, нажмите «Проверить существующий план»: эта команда сохраняет присланные даты.</p>
+    </details>
+    <div class="actions"><button id="run" type="button">Построить график и проверить</button><button id="audit" class="secondary" type="button">Проверить существующий план</button></div>
+    <p id="status" role="status" aria-live="polite">Загружаем учебный пример…</p>
+  </section>
+  <section id="result" hidden aria-labelledby="result-title">
+    <div class="section-top"><h2 id="result-title">Результат проверки</h2><span id="mode" class="badge"></span></div>
+    <div class="metrics"><div class="card"><span>Окончание с учётом пауз</span><strong id="finish"></strong></div><div class="card"><span>Желаемый срок</span><strong id="deadline-view"></strong></div><div class="card"><span>Итог</span><strong id="outcome"></strong></div></div>
+    <p id="deadline-status" class="notice"></p>
+    <section class="card"><h2>График работ</h2><p>Одна бригада · московское время · паузы идут и в нерабочие часы</p>
+      <div class="table-wrap"><table><thead><tr><th>Работа</th><th>Зависит от</th><th>Начало</th><th>Окончание работы</th><th>Трудозатраты</th><th>Пауза после</th></tr></thead><tbody id="schedule-rows"></tbody></table></div>
+      <p id="planner-summary"></p><ul id="calendar-notes"></ul><ul id="task-explanations"></ul>
+    </section>
+    <section class="card"><h2>Независимый контроль</h2><p id="audit-status"></p><p id="controller-summary"></p><div id="findings"></div></section>
+    <section class="card"><h2>Допущения и границы</h2><ul id="assumptions"></ul></section>
+    <details class="card"><summary>Документы результата</summary><pre id="raw"></pre></details>
+  </section>
+</main></body></html>

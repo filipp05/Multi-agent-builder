@@ -159,8 +159,12 @@ def validate_bundle(data):
                 seconds += Decimal(str(max(0,(min(end,hi)-max(start,lo)).total_seconds())))
             day += timedelta(days=1)
         require(seconds == Decimal(tasks[tid]['labor_hours'])*3600, 'Трудозатраты не совпадают с календарём')
-        require(start.weekday() in calendar['work_weekdays'] and calendar['day_start_hour'] <= start.hour < calendar['day_start_hour']+calendar['hours_per_day'], 'Начало вне рабочего времени')
-        require(end.weekday() in calendar['work_weekdays'] and calendar['day_start_hour'] < (end.hour+end.minute/60) <= calendar['day_start_hour']+calendar['hours_per_day'], 'Окончание вне рабочего времени')
+        start_day=datetime.combine(start.date(),time(calendar['day_start_hour']),zone)
+        require(start.weekday() in calendar['work_weekdays'] and start_day <= start < start_day+timedelta(hours=calendar['hours_per_day']), 'Начало вне рабочего времени')
+        # A shift ending at 24:00 ends at 00:00 on the next date, possibly a weekend.
+        end_date=end.date()-timedelta(days=1) if end.time()==time(0) else end.date()
+        end_day=datetime.combine(end_date,time(calendar['day_start_hour']),zone)
+        require(end_date.weekday() in calendar['work_weekdays'] and end_day < end <= end_day+timedelta(hours=calendar['hours_per_day']), 'Окончание вне рабочего времени')
         times[tid]=(start,end)
         for req in requirements.values():
             if tid in req['task_ids']:
