@@ -26,3 +26,4 @@ jobs:
       - run: python -m pytest -q tests/filipp
       - run: python -m pytest -q tests/oleg
       - run: python -m pytest -q tests/karina
+      - run: python -m pytest -q tests/misha
